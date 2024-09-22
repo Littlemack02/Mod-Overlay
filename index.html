@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Drag and Drop</title>
+  <style>
+    body { margin: 0; overflow: hidden; }
+    .image {
+      position: absolute;
+      cursor: grab;
+    }
+  </style>
+</head>
+<body>
+  <img id="img1" class="image" src="image1.png" width="200" style="left: 100px; top: 100px;" />
+  <img id="img2" class="image" src="image2.png" width="200" style="left: 300px; top: 300px;" />
+  <img id="img2" class="image" src="image2.png" width="200" style="left: 300px; top: 300px;" />
+  <img id="img2" class="image" src="image2.png" width="200" style="left: 300px; top: 300px;" />
+  <img id="img2" class="image" src="image2.png" width="200" style="left: 300px; top: 300px;" />
+  <script>
+    const images = document.querySelectorAll('.image');
+    images.forEach(img => {
+      img.addEventListener('mousedown', onMouseDown);
+
+      function onMouseDown(event) {
+        const img = event.target;
+        const shiftX = event.clientX - img.getBoundingClientRect().left;
+        const shiftY = event.clientY - img.getBoundingClientRect().top;
+
+        function moveAt(pageX, pageY) {
+          img.style.left = pageX - shiftX + 'px';
+          img.style.top = pageY - shiftY + 'px';
+        }
+
+        function onMouseMove(event) {
+          moveAt(event.pageX, event.pageY);
+        }
+
+        document.addEventListener('mousemove', onMouseMove);
+
+        img.onmouseup = function() {
+          document.removeEventListener('mousemove', onMouseMove);
+          img.onmouseup = null;
+        };
+      }
+
+      img.ondragstart = function() {
+        return false;
+      };
+    });
+  </script>
+</body>
+</html>
